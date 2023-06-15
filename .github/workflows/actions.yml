@@ -1,0 +1,54 @@
+name: 'Hello World' # name 定义工作流的名称
+description: 'Greet someone and record the time' # 对该工作流要完成的任务进行简单的描述.
+inputs: # 输入类
+  who-to-greet:  # 变量 id of output
+    description: '测试输入描述'
+    required: true   # 必须存在
+    default: 'World' # 默认值
+outputs: # 输出类
+  time: # 变量 id of output
+    description: '测试输出描述'
+runs: # 运行
+  using: 'node12' # 使用 node12 运行
+  main: 'index.js' # 运行入口
+const core = require('@actions/core');
+const github = require('@actions/github');
+
+try {
+  // `who-to-greet` input defined in action metadata file
+  // 获取 action.yml 中 input 类 定义的变量
+  const nameToGreet = core.getInput('who-to-greet');
+  console.log(`Hello ${nameToGreet}!`);
+  const time = (new Date()).toTimeString();
+
+  // 输出 action.yml 中 output 类 定义的变量
+  core.setOutput("time", time);
+
+
+  // Get the JSON webhook payload for the event that triggered the workflow
+  // 触发工作流完成钩子
+  const payload = JSON.stringify(github.context.payload, undefined, 2)
+  console.log(`The event payload: ${payload}`);
+} catch (error) {
+  core.setFailed(error.message); // 报错
+}
+on: [push] # push 操作执行自动化
+
+jobs: # 任务
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      # 要使用此仓库的私有操作，必须检出仓库（未发布的actions，需要用actions/checkout）
+      # 此操作会重新拉取仓库
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Hello world action step
+      id: hello123
+      # uses: actions/hello-world-javascript-action@v1
+      uses: ./ # 引入使用自定义的脚本,相对路径为私有操作，非第三方引用
+      with:
+        who-to-greet: '测试'
+    # Use the output from the `hello` step
+    - name: 获取输出时间
+      run: echo "时间是 ${{ steps.hello123.outputs.time }}"
