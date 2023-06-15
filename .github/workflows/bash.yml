@@ -1,4 +1,4 @@
-name: Run Bash Script
+name: Run bash Script
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       
-      - name: Run Bash script
+      - name: Run bash script
         run: |
           chmod +x generate_dockerfile.sh
           ./generate_dockerfile.sh
