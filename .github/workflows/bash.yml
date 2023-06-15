@@ -1,0 +1,19 @@
+name: Run Bash Script
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Run Bash script
+        run: |
+          chmod +x generate_dockerfile.sh
+          ./generate_dockerfile.sh
