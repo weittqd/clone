@@ -16,4 +16,4 @@ jobs:
       - name: Run bash script
         run: |
           chmod +x base.sh
-          ./base.sh
+          ./hello-world/base.sh
