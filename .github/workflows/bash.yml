@@ -16,4 +16,4 @@ jobs:
       - name: Run bash script
         run: |
           chmod +x generate_dockerfile.sh
-          ./generate_dockerfile.sh
+          ./base.sh
